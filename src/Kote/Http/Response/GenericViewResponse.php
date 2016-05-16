@@ -28,13 +28,11 @@ class GenericViewResponse extends Response
     /**
      * @param $viewFileName
      * @param array $context
-     * @param string $viewDirectoryPrefix
      */
-    public function __construct($viewFileName, array $context = [], $viewDirectoryPrefix = "")
+    public function __construct($viewFileName, array $context = [])
     {
         $this->setViewFileName($viewFileName);
         $this->setContextData($context);
-        $this->setViewDirectoryPrefix($viewDirectoryPrefix);
     }
 
     /**
@@ -45,6 +43,7 @@ class GenericViewResponse extends Response
     public function bindVariable($key, $value)
     {
         $this->contextData[$key] = $value;
+
         return $this;
     }
 
@@ -79,6 +78,7 @@ class GenericViewResponse extends Response
     public function setViewFileName($viewFileName)
     {
         $this->viewFileName = $viewFileName;
+
         return $this;
     }
 
@@ -87,7 +87,7 @@ class GenericViewResponse extends Response
      */
     public function getViewFullPath()
     {
-        return rtrim($this->getViewDirectoryPrefix(), "/") . "/" . $this->getViewFileName();
+        return rtrim(self::getViewDirectoryPrefix(), "/") . "/" . $this->getViewFileName();
     }
 
     /**
@@ -105,6 +105,7 @@ class GenericViewResponse extends Response
     public function setContextData($contextData)
     {
         $this->contextData = $contextData;
+
         return $this;
     }
 
