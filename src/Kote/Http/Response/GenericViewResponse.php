@@ -28,11 +28,13 @@ class GenericViewResponse extends Response
     /**
      * @param $viewFileName
      * @param array $context
+     * @param int $statusCode
      */
-    public function __construct($viewFileName, array $context = [])
+    public function __construct($viewFileName, array $context = [], $statusCode = StatusCode::HTTP_OK)
     {
         $this->setViewFileName($viewFileName);
         $this->setContextData($context);
+        $this->setStatusCode($statusCode);
     }
 
     /**
@@ -124,10 +126,10 @@ class GenericViewResponse extends Response
 
         unset($context);
 
+
         /** @noinspection PhpIncludeInspection */
         include $view;
+
+
     }
 }
-
-
-
