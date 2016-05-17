@@ -41,7 +41,7 @@ abstract class Response implements Renderable
     private $fileName = null;
 
     /**
-     * Is this response is attachment?
+     * Is this response an attachment?
      *
      * @var bool
      */
