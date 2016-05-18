@@ -8,6 +8,8 @@
 namespace Kote\Http\Response;
 
 
+use Kote\Http\Request;
+
 abstract class Response implements Renderable
 {
     const DEFAULT_CONTENT_TYPE = "text/html";
@@ -68,14 +70,30 @@ abstract class Response implements Renderable
      */
     private $contentLength = null;
 
+    /**
+     * @var bool
+     */
+    private $shouldRenderContent = true;
+
+
     protected abstract function renderContent();
+
+    public function prepare(Request $request)
+    {
+        if ($request->isMethod('HEAD')) {
+            $this->shouldRenderContent = false;
+        }
+    }
 
     public function render()
     {
         $this->prepareHeaders();
         $this->sendStatusCode();
         $this->sendHeaders();
-        $this->renderContent();
+
+        if ($this->shouldRenderContent) {
+            $this->renderContent();
+        }
     }
 
     private function prepareHeaders()
