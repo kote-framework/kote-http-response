@@ -1,14 +1,10 @@
 <?php
-/**
- * @author Roman Gemini <roman_gemini@ukr.net>
- * @date 16.05.16
- * @time 22:11
- */
 
-namespace Kote\Http\Response;
+namespace Nerd\Framework\Http\Response;
 
+use Nerd\Framework\Http\CookieContract;
 
-class Cookie
+class Cookie implements CookieContract
 {
     private $name;
     private $value;
@@ -65,29 +61,46 @@ class Cookie
         return $this->domain;
     }
 
-    public function getSecure()
+    public function isSecure()
     {
         return $this->secure;
     }
 
-    public function getHttp()
+    public function isHttpOnly()
     {
         return $this->http;
     }
 
-    /**
-     * Sends cookie to client.
-     */
-    public function send()
+    public function isRaw()
     {
-        setcookie(
-            $this->getName(),
-            $this->getValue(),
-            $this->getExpire(),
-            $this->getPath(),
-            $this->getDomain(),
-            $this->getSecure(),
-            $this->getHttp()
-        );
+        return false;
+    }
+
+    public function __toString()
+    {
+        $string  = 'Set-Cookie: ';
+        $string .= $this->getName() . '=' . $this->getValue();
+
+        if ($this->getExpire()) {
+            $string .= '; Expires=' . $this->getExpire();
+        }
+
+        if ($this->getPath()) {
+            $string .= '; Path=' . $this->getPath();
+        }
+
+        if ($this->getDomain()) {
+            $string .= '; Domain=' . $this->getDomain();
+        }
+
+        if ($this->isSecure()) {
+            $string .= '; Secure';
+        }
+
+        if ($this->isHttpOnly()) {
+            $string .= '; HttpOnly';
+        }
+
+        return $string;
     }
 }

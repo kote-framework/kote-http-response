@@ -5,7 +5,7 @@
  * @time 22:15
  */
 
-namespace Kote\Http\Response;
+namespace Nerd\Framework\Http\Response;
 
 
 class GenericViewResponse extends Response
@@ -123,13 +123,8 @@ class GenericViewResponse extends Response
     private function renderGenericView($view, array $context)
     {
         extract($context);
-
         unset($context);
-
-
         /** @noinspection PhpIncludeInspection */
         include $view;
-
-
     }
 }

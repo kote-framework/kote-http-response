@@ -1,12 +1,6 @@
 <?php
-/**
- * @author Roman Gemini <roman_gemini@ukr.net>
- * @date 16.05.16
- * @time 22:19
- */
 
-namespace Kote\Http\Response;
-
+namespace Nerd\Framework\Http\Response;
 
 class PlainResponse extends Response
 {
@@ -24,11 +18,9 @@ class PlainResponse extends Response
         return $this->content;
     }
 
-    public function write(...$string)
+    public function write($string)
     {
-        foreach ($string as $item) {
-            $this->content .= $item;
-        }
+        $this->content .= $string;
     }
 
     public function renderContent()

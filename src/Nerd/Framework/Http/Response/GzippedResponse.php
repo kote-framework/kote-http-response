@@ -1,19 +1,13 @@
 <?php
-/**
- * @author Roman Gemini <roman_gemini@ukr.net>
- * @date 16.05.16
- * @time 22:13
- */
 
-namespace Kote\Http\Response;
-
+namespace Nerd\Framework\Http\Response;
 
 class GzippedResponse extends Response
 {
     const CONTENT_CHUNK_SIZE = 4096;
 
     /**
-     * @var Response
+     * @var ResponseContract
      */
     private $response;
 

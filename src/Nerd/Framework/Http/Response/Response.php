@@ -1,16 +1,12 @@
 <?php
-/**
- * @author Roman Gemini <roman_gemini@ukr.net>
- * @date 16.05.16
- * @time 22:09
- */
 
-namespace Kote\Http\Response;
+namespace Nerd\Framework\Http\Response;
 
+use Nerd\Framework\Http\OutputContract;
+use Nerd\Framework\Http\RequestContract;
+use Nerd\Framework\Http\ResponseContract;
 
-use Kote\Http\Request;
-
-abstract class Response implements Renderable
+abstract class Response implements ResponseContract
 {
     const DEFAULT_CONTENT_TYPE = "text/html";
     const DEFAULT_CHARSET = "utf-8";
@@ -75,21 +71,20 @@ abstract class Response implements Renderable
      */
     private $shouldRenderContent = true;
 
-
     protected abstract function renderContent();
 
-    public function prepare(Request $request)
+    public function prepare(RequestContract $request)
     {
         if ($request->isMethod('HEAD')) {
             $this->shouldRenderContent = false;
         }
     }
 
-    public function render()
+    public function render(OutputContract $output)
     {
         $this->prepareHeaders();
-        $this->sendStatusCode();
-        $this->sendHeaders();
+        $this->sendStatusCode($output);
+        $this->sendHeaders($output);
 
         if ($this->shouldRenderContent) {
             $this->renderContent();
@@ -99,7 +94,7 @@ abstract class Response implements Renderable
     private function prepareHeaders()
     {
         if (!is_null($this->fileName)) {
-            $this->addHeader(self::CONTENT_DISPOSITION_HEADER, "filename*=UTF-8''".$this->fileName);
+            $this->addHeader(self::CONTENT_DISPOSITION_HEADER, "filename*=UTF-8''" . $this->fileName);
         }
 
         if ($this->isAttachment) {
@@ -115,24 +110,24 @@ abstract class Response implements Renderable
         $this->addHeader(self::CONTENT_TYPE_HEADER, "charset={$this->charset}");
     }
 
-    private function sendHeaders()
+    private function sendHeaders(OutputContract $output)
     {
-        if (headers_sent()) {
+        if ($output->isHeadersSent()) {
             return;
         }
 
         foreach ($this->cookies as $cookie) {
-            $cookie->send();
+            $output->sendCookie($cookie);
         }
 
         foreach ($this->headers as $name => $value) {
-            header($name.": ".implode("; ", $value));
+            $output->sendHeader($name.": ".implode("; ", $value));
         }
     }
 
-    private function sendStatusCode()
+    private function sendStatusCode(OutputContract $output)
     {
-        header($this->getStatusText($this->statusCode));
+        $output->sendHeader($this->getStatusText($this->statusCode));
     }
 
     public function getStatusText($statusCode)
@@ -176,7 +171,7 @@ abstract class Response implements Renderable
             case 504: $text = 'Gateway Time-out'; break;
             case 505: $text = 'HTTP Version not supported'; break;
             default:
-                throw new \InvalidArgumentException('Unknown http status code "' . htmlentities($statusCode) . '"');
+                throw new \InvalidArgumentException('Unknown HTTP Status Code "' . htmlentities($statusCode) . '"');
                 break;
         }
 

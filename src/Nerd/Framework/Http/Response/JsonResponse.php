@@ -5,7 +5,7 @@
  * @time 22:18
  */
 
-namespace Kote\Http\Response;
+namespace Nerd\Framework\Http\Response;
 
 
 class JsonResponse extends Response

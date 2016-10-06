@@ -1,12 +1,6 @@
 <?php
-/**
- * @author Roman Gemini <roman_gemini@ukr.net>
- * @date 16.05.16
- * @time 22:11
- */
 
-namespace Kote\Http\Response;
-
+namespace Nerd\Framework\Http\Response;
 
 class StatusCode
 {

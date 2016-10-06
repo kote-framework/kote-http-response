@@ -1,21 +1,28 @@
 {
-  "name": "kote/http-response",
-  "description": "",
+  "name": "nerd-framework/nerd-http",
+  "description": "HTTP Request and Response for Nerd Framework",
   "type": "library",
   "license": "MIT",
   "authors": [
     {
-      "name": "Roman Gemini",
-      "email": "roman_gemini@ukr.net"
+      "name": "Roman Lakhtadyr",
+      "email": "roman.lakhtadyr@gmail.com"
     }
   ],
   "require": {
-    "php": ">=5.6"
+    "php": ">=5.6",
+    "nerd-framework/nerd-contracts": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.5",
+    "squizlabs/php_codesniffer": "^2.7",
+    "satooshi/php-coveralls": "^1.0"
   },
   "autoload": {
-    "files": ["src/Kote/helper.php"],
+    "files": [
+    ],
     "psr-4": {
-      "Kote\\": "src/Kote"
+      "": "src/"
     }
   }
 }
