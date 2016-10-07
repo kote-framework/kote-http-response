@@ -8,6 +8,8 @@
 namespace Nerd\Framework\Http\Response;
 
 
+use Nerd\Framework\Http\OutputContract;
+
 class GenericViewResponse extends Response
 {
     /**
@@ -111,9 +113,14 @@ class GenericViewResponse extends Response
         return $this;
     }
 
-    public function renderContent()
+    public function renderContent(OutputContract $output)
     {
-        $this->renderGenericView($this->getViewFullPath(), $this->getContextData());
+        ob_start();
+        $this->renderGenericView(
+            $this->getViewFullPath(),
+            $this->getContextData()
+        );
+        $output->sendData(ob_get_clean());
     }
 
     /**

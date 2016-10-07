@@ -2,6 +2,8 @@
 
 namespace Nerd\Framework\Http\Response;
 
+use Nerd\Framework\Http\OutputContract;
+
 class PlainResponse extends Response
 {
     private $content = "";
@@ -23,9 +25,8 @@ class PlainResponse extends Response
         $this->content .= $string;
     }
 
-    public function renderContent()
+    public function renderContent(OutputContract $output)
     {
-        echo $this->content;
-        flush();
+        $output->sendData($this->content);
     }
 }

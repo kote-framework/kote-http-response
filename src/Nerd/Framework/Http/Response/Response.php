@@ -67,14 +67,45 @@ abstract class Response implements ResponseContract
     private $contentLength = null;
 
     /**
+     * Server protocol version.
+     *
+     * @var string
+     */
+    private $serverProtocol = null;
+
+    /**
      * @var bool
      */
     private $shouldRenderContent = true;
 
-    protected abstract function renderContent();
+    /**
+     * @return string
+     */
+    public function getServerProtocol()
+    {
+        return $this->serverProtocol;
+    }
 
+    /**
+     * @param string $serverProtocol
+     */
+    public function setServerProtocol($serverProtocol)
+    {
+        $this->serverProtocol = $serverProtocol;
+    }
+
+    protected abstract function renderContent(OutputContract $output);
+
+    /**
+     * @param RequestContract $request
+     * @return void
+     */
     public function prepare(RequestContract $request)
     {
+        if (is_null($this->getServerProtocol())) {
+            $this->setServerProtocol($_SERVER['SERVER_PROTOCOL']);
+        }
+
         if ($request->isMethod('HEAD')) {
             $this->shouldRenderContent = false;
         }
@@ -87,13 +118,13 @@ abstract class Response implements ResponseContract
         $this->sendHeaders($output);
 
         if ($this->shouldRenderContent) {
-            $this->renderContent();
+            $this->renderContent($output);
         }
     }
 
     private function prepareHeaders()
     {
-        if (!is_null($this->fileName)) {
+        if ($this->getFileName()) {
             $this->addHeader(self::CONTENT_DISPOSITION_HEADER, "filename*=UTF-8''" . $this->fileName);
         }
 
@@ -225,6 +256,14 @@ abstract class Response implements ResponseContract
     }
 
     /**
+     * @return string|null
+     */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+
+    /**
      * @param boolean $isAttachment
      * @return Response
      */
@@ -232,6 +271,14 @@ abstract class Response implements ResponseContract
     {
         $this->isAttachment = $isAttachment;
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isAttachment()
+    {
+        return $this->isAttachment;
     }
 
     /**
@@ -262,15 +309,5 @@ abstract class Response implements ResponseContract
     {
         $this->contentLength = $contentLength;
         return $this;
-    }
-
-    /**
-     * Compress content using gzip library.
-     *
-     * @return Response
-     */
-    public function gzip()
-    {
-        return new GzippedResponse($this);
     }
 }

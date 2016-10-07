@@ -2,6 +2,8 @@
 
 namespace Nerd\Framework\Http\Response;
 
+use Nerd\Framework\Http\OutputContract;
+
 class StreamResponse extends Response
 {
     const PIPE_BUFFER_SIZE = 4096;
@@ -25,11 +27,10 @@ class StreamResponse extends Response
         return $this;
     }
 
-    public function renderContent()
+    public function renderContent(OutputContract $output)
     {
         while ($data = fread($this->stream, self::PIPE_BUFFER_SIZE)) {
-            echo $data;
-            flush();
+            $output->sendData($data);
         }
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Nerd\Framework\Http\Response;
 
+use Nerd\Framework\Http\OutputContract;
+
 class CallbackResponse extends Response
 {
     private $callable;
@@ -17,11 +19,8 @@ class CallbackResponse extends Response
         $this->callable = $callable;
     }
 
-    protected function renderContent()
+    protected function renderContent(OutputContract $output)
     {
-        $writer = function ($content) {
-            echo $content;
-        };
-        call_user_func($this->callable, $writer);
+        call_user_func($this->callable, $output);
     }
 }

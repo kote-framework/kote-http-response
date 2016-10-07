@@ -8,6 +8,8 @@
 namespace Nerd\Framework\Http\Response;
 
 
+use Nerd\Framework\Http\OutputContract;
+
 class JsonResponse extends Response
 {
     const JSON_CONTENT_TYPE = "application/json";
@@ -39,8 +41,8 @@ class JsonResponse extends Response
         return $this;
     }
 
-    public function renderContent()
+    public function renderContent(OutputContract $output)
     {
-        echo json_encode($this->data, JSON_UNESCAPED_UNICODE);
+        $output->sendData(json_encode($this->data, JSON_UNESCAPED_UNICODE));
     }
 }

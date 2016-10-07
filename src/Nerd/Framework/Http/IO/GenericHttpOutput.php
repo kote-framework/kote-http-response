@@ -24,6 +24,9 @@ class GenericHttpOutput implements OutputContract
 
     public function sendHeader($header)
     {
+        if ($this->isHeadersSent()) {
+            throw new \Exception("Headers already sent");
+        }
         header($header);
     }
 
