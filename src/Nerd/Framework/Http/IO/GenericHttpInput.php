@@ -13,9 +13,12 @@ class GenericHttpInput implements InputContract
      *
      * @return RequestContract
      */
-    public function getRequestObject()
+    public function getRequest()
     {
-        return new Request($_SERVER, $_GET, $_POST, $_FILES, $_COOKIE);
+        $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+        $method = $_SERVER["REQUEST_METHOD"];
+
+        return new Request($path, $method, $_GET, $_POST, $_FILES, $_COOKIE, $_SERVER);
     }
 
     /**
@@ -23,9 +26,9 @@ class GenericHttpInput implements InputContract
      *
      * @return string
      */
-    public function getRequestBody()
+    public function getBody()
     {
-        return stream_get_contents($this->getRequestBodyStream());
+        return stream_get_contents($this->getStream());
     }
 
     /**
@@ -33,7 +36,7 @@ class GenericHttpInput implements InputContract
      *
      * @return resource
      */
-    public function getRequestBodyStream()
+    public function getStream()
     {
         return fopen("php://input", "rb");
     }

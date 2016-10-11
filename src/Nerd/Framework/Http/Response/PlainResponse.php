@@ -8,7 +8,8 @@ class PlainResponse extends Response
 {
     private $content = "";
 
-    public function __construct($content = "") {
+    public function __construct($content = "")
+    {
         $this->content = $content;
     }
 

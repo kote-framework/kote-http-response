@@ -25,8 +25,15 @@ class Cookie implements CookieContract
      * @param bool $secure
      * @param bool $http
      */
-    public function __construct($name, $value, $expire = 0, $path = null, $domain = null, $secure = false, $http = false)
-    {
+    public function __construct(
+        $name,
+        $value,
+        $expire = 0,
+        $path = null,
+        $domain = null,
+        $secure = false,
+        $http = false
+    ) {
         $this->name = $name;
         $this->value = $value;
         $this->expire = $expire;
