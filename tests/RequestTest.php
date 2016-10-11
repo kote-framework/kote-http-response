@@ -17,6 +17,7 @@ class RequestTest extends TestCase
         $this->assertEquals('GET', $request->getMethod());
         $this->assertTrue($request->isMethod('GET'));
         $this->assertFalse($request->isSecure());
+        $this->assertFalse($request->hasFiles());
 
         $this->assertEquals(Request::DEFAULT_HOST, $request->getRemoteAddress());
         $this->assertEquals(Request::DEFAULT_USER_AGENT, $request->getUserAgent());
