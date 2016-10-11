@@ -16,9 +16,10 @@ class RequestTest extends TestCase
         $this->assertEquals('/', $request->getPath());
         $this->assertEquals('GET', $request->getMethod());
         $this->assertTrue($request->isMethod('GET'));
+        $this->assertFalse($request->isSecure());
 
         $this->assertEquals(Request::DEFAULT_HOST, $request->getRemoteAddress());
-        $this->assertEquals(Request::USER_AGENT, $request->getUserAgent());
+        $this->assertEquals(Request::DEFAULT_USER_AGENT, $request->getUserAgent());
     }
 
     public function testCreatePostRequest()
@@ -68,11 +69,22 @@ class RequestTest extends TestCase
 
         $this->assertEquals('1.2.3.4', $request2->getRemoteAddress());
 
-        $request2 = new Request('/', 'GET', [], [], [], [], [
+        $request3 = new Request('/', 'GET', [], [], [], [], [
             'HTTP_X_REAL_IP' => '1.2.3.4',
             'REMOTE_ADDR' => '5.6.7.8'
         ]);
 
-        $this->assertEquals('1.2.3.4', $request2->getRemoteAddress());
+        $this->assertEquals('1.2.3.4', $request3->getRemoteAddress());
+
+        $request4 = Request::create('/', 'GET', [], false, '6.7.8.9');
+
+        $this->assertEquals('6.7.8.9', $request4->getRemoteAddress());
+    }
+
+    public function testIsSecureOption()
+    {
+        $request = Request::create('/', 'GET', [], true);
+
+        $this->assertTrue($request->isSecure());
     }
 }

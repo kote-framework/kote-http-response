@@ -6,11 +6,12 @@ use Nerd\Framework\Http\RequestContract;
 
 class Request implements RequestContract
 {
-    const USER_AGENT = 'Nerd/1.0';
+    const DEFAULT_USER_AGENT = 'Nerd/1.0';
     const DEFAULT_HOST = '127.0.0.1';
 
     private $path;
     private $method;
+    private $isSecure;
 
     private $query;
     private $post;
@@ -35,8 +36,10 @@ class Request implements RequestContract
         array $parameters = []
     ) {
         $this->method = $method;
-
         $this->path = self::normalizePath($path);
+        $this->isSecure = array_key_exists('HTTPS', $parameters)
+            && $parameters['HTTPS'] !== 'off';
+
         $this->parameters = self::filterParameters($parameters);
 
         $this->query = $query;
@@ -49,6 +52,7 @@ class Request implements RequestContract
      * @param $path
      * @param string $method
      * @param array $query
+     * @param boolean $isSecure
      * @param string $remoteAddress
      * @return Request
      */
@@ -56,6 +60,7 @@ class Request implements RequestContract
         $path,
         $method = 'GET',
         array $query = [],
+        $isSecure = false,
         $remoteAddress = self::DEFAULT_HOST
     ) {
         $pathParts = explode('?', $path, 2);
@@ -72,7 +77,8 @@ class Request implements RequestContract
         return new self($path, $method, $query, [], [], [], [
             "REMOTE_ADDR" => $remoteAddress,
             "HTTP_X_REAL_IP" => $remoteAddress,
-            "HTTP_USER_AGENT" => self::USER_AGENT
+            "HTTP_USER_AGENT" => self::DEFAULT_USER_AGENT,
+            "HTTPS" => $isSecure ? "on" : "off"
         ]);
     }
 
@@ -120,6 +126,11 @@ class Request implements RequestContract
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function isSecure()
+    {
+        return $this->isSecure;
     }
 
     public function getUserAgent()
