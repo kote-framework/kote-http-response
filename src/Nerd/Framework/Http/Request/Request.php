@@ -7,6 +7,7 @@ use Nerd\Framework\Http\RequestContract;
 class Request implements RequestContract
 {
     const USER_AGENT = 'Nerd/1.0';
+    const DEFAULT_HOST = '127.0.0.1';
 
     private $path;
     private $method;
@@ -55,7 +56,7 @@ class Request implements RequestContract
         $path,
         $method = 'GET',
         array $query = [],
-        $remoteAddress = '127.0.0.1'
+        $remoteAddress = self::DEFAULT_HOST
     ) {
         $pathParts = explode('?', $path, 2);
 
@@ -128,7 +129,8 @@ class Request implements RequestContract
 
     public function getRemoteAddress()
     {
-        return $this->getServerParameter('HTTP_X_REAL_IP') ?: $this->getServerParameter('REMOTE_ADDR');
+        return $this->getServerParameter('HTTP_X_REAL_IP')
+            ?: $this->getServerParameter('REMOTE_ADDR');
     }
 
     public function getQueryParameter($key, $default = null)

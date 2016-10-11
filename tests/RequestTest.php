@@ -17,7 +17,7 @@ class RequestTest extends TestCase
         $this->assertEquals('GET', $request->getMethod());
         $this->assertTrue($request->isMethod('GET'));
 
-        $this->assertEquals('127.0.0.1', $request->getRemoteAddress());
+        $this->assertEquals(Request::DEFAULT_HOST, $request->getRemoteAddress());
         $this->assertEquals(Request::USER_AGENT, $request->getUserAgent());
     }
 
