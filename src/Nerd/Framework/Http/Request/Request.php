@@ -133,6 +133,11 @@ class Request implements RequestContract
         return $this->isSecure;
     }
 
+    public function hasFiles()
+    {
+        return sizeof($this->files) > 0;
+    }
+
     public function getUserAgent()
     {
         return $this->getServerParameter('HTTP_USER_AGENT');
