@@ -26,7 +26,7 @@ abstract class Response implements ResponseContract
     /**
      * Array of Cookies to be sent.
      *
-     * @var Cookie[] $cookies
+     * @var CookieContract[] $cookies
      */
     private $cookies = [];
 
@@ -238,10 +238,10 @@ abstract class Response implements ResponseContract
     }
 
     /**
-     * @param Cookie $cookie
+     * @param CookieContract $cookie
      * @return Response
      */
-    public function addCookie(Cookie $cookie)
+    public function addCookie(CookieContract $cookie)
     {
         $this->cookies[] = $cookie;
         return $this;
@@ -311,5 +311,12 @@ abstract class Response implements ResponseContract
     {
         $this->contentLength = $contentLength;
         return $this;
+    }
+
+    /**
+     * Close resources (if any) used in this Response.
+     */
+    public function close()
+    {
     }
 }

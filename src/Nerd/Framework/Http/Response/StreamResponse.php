@@ -12,7 +12,7 @@ class StreamResponse extends Response
 
     public function __construct($stream = null, $statusCode = StatusCode::HTTP_OK)
     {
-        if ("stream" != get_resource_type($stream)) {
+        if (!is_resource($stream) || "stream" != get_resource_type($stream)) {
             throw new \InvalidArgumentException("Invalid stream handle passed into response.");
         }
 
@@ -32,5 +32,13 @@ class StreamResponse extends Response
         while ($data = fread($this->stream, self::PIPE_BUFFER_SIZE)) {
             $output->sendData($data);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function close()
+    {
+        fclose($this->stream);
     }
 }

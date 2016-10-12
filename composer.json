@@ -22,7 +22,8 @@
     "files": [
     ],
     "psr-4": {
-      "": "src/"
+      "": "src/",
+      "tests": "tests/"
     }
   }
 }
