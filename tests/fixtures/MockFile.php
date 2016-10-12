@@ -13,6 +13,9 @@ class MockFile extends File
 
     protected function moveUploadedFile($file, $destination)
     {
+        if (!is_dir(pathinfo($destination, PATHINFO_DIRNAME))) {
+            return false;
+        }
         return copy($file, $destination);
     }
 }

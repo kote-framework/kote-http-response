@@ -88,14 +88,28 @@ class FileTest extends TestCase
      */
     public function testSaveFile(File $file)
     {
-        $contents = stream_get_contents($file->getStream());
+        $clonedFile = clone $file;
+
+        $contents = stream_get_contents($clonedFile->getStream());
         $saveTo = vfsStream::newFile('save.me')->at($this->vfs);
 
-        $file->saveAs($saveTo->url());
-        $this->assertTrue($file->isSaved());
+        $clonedFile->saveAs($saveTo->url());
+        $this->assertTrue($clonedFile->isSaved());
         $this->assertEquals($contents, $saveTo->getContent());
 
-        return $file;
+        return $clonedFile;
+    }
+
+    /**
+     * @depends testFile
+     * @expectedException \Exception
+     * @param File $file
+     */
+    public function testSaveError(File $file)
+    {
+        $clonedFile = clone $file;
+
+        $clonedFile->saveAs($this->vfs->url());
     }
 
     /**
