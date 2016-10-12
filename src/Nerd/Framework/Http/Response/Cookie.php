@@ -2,8 +2,6 @@
 
 namespace Nerd\Framework\Http\Response;
 
-use Nerd\Framework\Http\CookieContract;
-
 class Cookie implements CookieContract
 {
     private $name;

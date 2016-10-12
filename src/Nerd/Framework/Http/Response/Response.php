@@ -2,9 +2,8 @@
 
 namespace Nerd\Framework\Http\Response;
 
-use Nerd\Framework\Http\OutputContract;
-use Nerd\Framework\Http\RequestContract;
-use Nerd\Framework\Http\ResponseContract;
+use Nerd\Framework\Http\IO\OutputContract;
+use Nerd\Framework\Http\Request\RequestContract;
 
 abstract class Response implements ResponseContract
 {

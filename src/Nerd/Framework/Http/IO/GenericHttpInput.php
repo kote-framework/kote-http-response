@@ -2,9 +2,8 @@
 
 namespace Nerd\Framework\Http\IO;
 
-use Nerd\Framework\Http\InputContract;
-use Nerd\Framework\Http\RequestContract;
 use Nerd\Framework\Http\Request\Request;
+use Nerd\Framework\Http\Request\RequestContract;
 
 class GenericHttpInput implements InputContract
 {

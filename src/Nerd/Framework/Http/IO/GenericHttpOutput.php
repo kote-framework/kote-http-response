@@ -2,8 +2,7 @@
 
 namespace Nerd\Framework\Http\IO;
 
-use Nerd\Framework\Http\CookieContract;
-use Nerd\Framework\Http\OutputContract;
+use Nerd\Framework\Http\Response\CookieContract;
 
 class GenericHttpOutput implements OutputContract
 {

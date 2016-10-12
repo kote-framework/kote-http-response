@@ -2,8 +2,6 @@
 
 namespace Nerd\Framework\Http\Request;
 
-use Nerd\Framework\Http\RequestContract;
-
 class Request implements RequestContract
 {
     const DEFAULT_USER_AGENT = 'Nerd/1.0';
