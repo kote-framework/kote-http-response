@@ -82,6 +82,17 @@ class RequestTest extends TestCase
         $this->assertEquals('6.7.8.9', $request4->getRemoteAddress());
     }
 
+    public function testServerAddress()
+    {
+        $request1 = Request::create('/');
+
+        $this->assertEquals(Request::DEFAULT_HOST, $request1->getServerAddress());
+
+        $request2 = Request::create('/', 'GET', [], false, '6.7.8.9');
+
+        $this->assertEquals('6.7.8.9', $request2->getServerAddress());
+    }
+
     public function testIsSecureOption()
     {
         $request = Request::create('/', 'GET', [], true);
