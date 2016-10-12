@@ -117,5 +117,4 @@ class RequestTest extends TestCase
         $this->assertEquals('second', $request->getHeader('Second-Header'));
         $this->assertEquals('2.3.4.5', $request->getHeader('X-Real-Ip'));
     }
-
 }
