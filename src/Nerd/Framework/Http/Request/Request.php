@@ -19,11 +19,10 @@ class Request implements RequestContract
     private $cookies;
 
     private $parameters;
+    private $headers;
 
     private static $filteredParameters = [
-        "REMOTE_ADDR",
-        "HTTP_X_REAL_IP",
-        "HTTP_USER_AGENT"
+        "REMOTE_ADDR"
     ];
 
     public function __construct(
@@ -41,6 +40,7 @@ class Request implements RequestContract
             && $parameters['HTTPS'] !== 'off';
 
         $this->parameters = self::filterParameters($parameters);
+        $this->headers = self::parametersToHeaders($parameters);
 
         $this->query = $query;
         $this->post = $post;
@@ -66,10 +66,11 @@ class Request implements RequestContract
         $pathParts = explode('?', $path, 2);
 
         if (sizeof($pathParts) == 2) {
+            $mergedQuery = array_merge(self::queryStringToAssoc($pathParts[1]), $query);
             return self::create(
                 $pathParts[0],
                 $method,
-                array_merge(self::queryStringToAssoc($pathParts[1]), $query),
+                $mergedQuery,
                 $remoteAddress
             );
         }
@@ -98,6 +99,34 @@ class Request implements RequestContract
                 sizeof($keyVal) == 2
                     ? [$keyVal[0] => urldecode($keyVal[1])]
                     : [$keyVal[0] => null]
+            );
+        }, []);
+    }
+
+    /**
+     * Convert HTTP_ parameters to headers map.
+     *
+     * @param $parameters
+     * @return mixed
+     */
+    private static function parametersToHeaders($parameters)
+    {
+        $filtered = array_filter(array_keys($parameters), function ($key) {
+            return strpos($key, 'HTTP_') === 0;
+        });
+        $transformKey = function ($key) {
+            $parts = explode('_', $key);
+            $lowerCase = array_map('strtolower', array_slice($parts, 1));
+            $firstUpper = array_map('ucfirst', $lowerCase);
+            return implode('-', $firstUpper);
+        };
+
+        return array_reduce($filtered, function ($acc, $key) use ($parameters, $transformKey) {
+            $headerKey = $transformKey($key);
+
+            return array_merge(
+                $acc,
+                [$headerKey => $parameters[$key]]
             );
         }, []);
     }
@@ -140,12 +169,12 @@ class Request implements RequestContract
 
     public function getUserAgent()
     {
-        return $this->getServerParameter('HTTP_USER_AGENT');
+        return $this->getHeader('User-Agent');
     }
 
     public function getRemoteAddress()
     {
-        return $this->getServerParameter('HTTP_X_REAL_IP')
+        return $this->getHeader('X-Real-Ip')
             ?: $this->getServerParameter('REMOTE_ADDR');
     }
 
@@ -167,5 +196,10 @@ class Request implements RequestContract
     public function getServerParameter($key, $default = null)
     {
         return array_key_exists($key, $this->parameters) ? $this->parameters[$key] : $default;
+    }
+
+    public function getHeader($key, $default = null)
+    {
+        return array_key_exists($key, $this->headers) ? $this->headers[$key] : $default;
     }
 }

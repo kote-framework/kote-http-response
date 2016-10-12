@@ -88,4 +88,22 @@ class RequestTest extends TestCase
 
         $this->assertTrue($request->isSecure());
     }
+
+    public function testParametersToHeaders()
+    {
+        $parameters = [
+            'REMOTE_ADDR' => '1.2.3.4',
+            'OTHER_THING' => 'value',
+            'HTTP_FIRST_HEADER' => 'first',
+            'HTTP_SECOND_HEADER' => 'second',
+            'IS_NOT_HTTP_HEADER' => 'not',
+            'HTTP_X_REAL_IP' => '2.3.4.5'
+        ];
+
+        $request = new Request('/', 'GET', [], [], [], [], $parameters);
+
+        $this->assertEquals('first', $request->getHeader('First-Header'));
+        $this->assertEquals('second', $request->getHeader('Second-Header'));
+        $this->assertEquals('2.3.4.5', $request->getHeader('X-Real-Ip'));
+    }
 }
