@@ -22,7 +22,7 @@ class Request implements RequestContract
     private $headers;
 
     private static $filteredParameters = [
-        "REMOTE_ADDR"
+        "REMOTE_ADDR", "SERVER_ADDR"
     ];
 
     public function __construct(
@@ -77,6 +77,7 @@ class Request implements RequestContract
 
         return new self($path, $method, $query, [], [], [], [
             "REMOTE_ADDR" => $remoteAddress,
+            "SERVER_ADDR" => $remoteAddress,
             "HTTP_X_REAL_IP" => $remoteAddress,
             "HTTP_USER_AGENT" => self::DEFAULT_USER_AGENT,
             "HTTPS" => $isSecure ? "on" : "off"
@@ -176,6 +177,11 @@ class Request implements RequestContract
     {
         return $this->getHeader('X-Real-Ip')
             ?: $this->getServerParameter('REMOTE_ADDR');
+    }
+
+    public function getServerAddress()
+    {
+        return $this->getServerParameter('SERVER_ADDR');
     }
 
     public function getQueryParameter($key, $default = null)
