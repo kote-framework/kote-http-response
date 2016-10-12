@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "82530e2b2d9fa968f01b9207df3e8a70",
+    "hash": "7499c9403a319c1be3720e1984f9c1de",
     "content-hash": "dcf9aa3f4fae373233d8e10a68e0cfdd",
     "packages": [
         {
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nerd-framework/nerd-contracts.git",
-                "reference": "0304c3e31b56c9552943818b4659b3ba42c816ab"
+                "reference": "531d4f5c658647e9e3eda8ce5c243be2c94499f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nerd-framework/nerd-contracts/zipball/0304c3e31b56c9552943818b4659b3ba42c816ab",
-                "reference": "0304c3e31b56c9552943818b4659b3ba42c816ab",
+                "url": "https://api.github.com/repos/nerd-framework/nerd-contracts/zipball/531d4f5c658647e9e3eda8ce5c243be2c94499f5",
+                "reference": "531d4f5c658647e9e3eda8ce5c243be2c94499f5",
                 "shasum": ""
             },
             "require-dev": {
@@ -43,7 +43,7 @@
                 }
             ],
             "description": "Framework contracts used in Nerd Framework",
-            "time": "2016-10-12 11:31:41"
+            "time": "2016-10-12 17:21:00"
         }
     ],
     "packages-dev": [
