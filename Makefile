@@ -12,3 +12,6 @@ test:
 
 lint:
 	composer exec 'phpcs --standard=PSR2 src tests'
+
+contracts:
+	composer update nerd-framework/nerd-contracts

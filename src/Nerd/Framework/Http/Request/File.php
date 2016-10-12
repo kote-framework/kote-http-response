@@ -2,22 +2,25 @@
 
 namespace Nerd\Framework\Http\Request;
 
-class File
+class File implements FileContract
 {
     private $name;
     private $size;
     private $tempName;
+    private $error;
 
     /**
      * @param $name
      * @param $size
      * @param $tempName
+     * @param int $error
      */
-    public function __construct($name, $size, $tempName)
+    public function __construct($name, $size, $tempName, $error = UPLOAD_ERR_OK)
     {
         $this->name = $name;
         $this->size = $size;
         $this->tempName = $tempName;
+        $this->error = $error;
     }
 
     /**
@@ -60,5 +63,21 @@ class File
     public function getStream()
     {
         return fopen($this->getTempName(), 'rb');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOk()
+    {
+        return $this->error === UPLOAD_ERR_OK;
+    }
+
+    /**
+     * @return int
+     */
+    public function getError()
+    {
+        return $this->error;
     }
 }

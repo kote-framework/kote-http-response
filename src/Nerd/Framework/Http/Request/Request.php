@@ -2,8 +2,6 @@
 
 namespace Nerd\Framework\Http\Request;
 
-use Nerd\Framework\Http\RequestContract;
-
 class Request implements RequestContract
 {
     const DEFAULT_USER_AGENT = 'Nerd/1.0';
@@ -41,10 +39,10 @@ class Request implements RequestContract
 
         $this->parameters = self::filterParameters($parameters);
         $this->headers = self::parametersToHeaders($parameters);
+        $this->files = self::encapsulateFiles($files);
 
         $this->query = $query;
         $this->post = $post;
-        $this->files = $files;
         $this->cookies = $cookies;
     }
 
@@ -133,6 +131,23 @@ class Request implements RequestContract
     }
 
     /**
+     * Encapsulate files into File objects.
+     *
+     * @param array $files
+     * @return File[]
+     */
+    private static function encapsulateFiles($files)
+    {
+        $validFiles = array_filter($files, function ($file) {
+            return $file['error'] == UPLOAD_ERR_OK;
+        });
+
+        return array_map(function ($file) {
+            return new File($file['name'], $file['size'], $file['tmp_name']);
+        }, $validFiles);
+    }
+
+    /**
      * @param array $parameters
      * @return array
      */
@@ -207,5 +222,10 @@ class Request implements RequestContract
     public function getHeader($key, $default = null)
     {
         return array_key_exists($key, $this->headers) ? $this->headers[$key] : $default;
+    }
+
+    public function getFile($key, $default = null)
+    {
+        return array_key_exists($key, $this->files) ? $this->files[$key] : $default;
     }
 }

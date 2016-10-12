@@ -2,7 +2,7 @@
 
 namespace Nerd\Framework\Http\Response;
 
-use Nerd\Framework\Http\OutputContract;
+use Nerd\Framework\Http\IO\OutputContract;
 
 class EmptyResponse extends Response
 {
