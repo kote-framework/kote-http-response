@@ -15,3 +15,6 @@ lint:
 
 contracts:
 	composer update nerd-framework/nerd-contracts
+
+coverage: test
+	composer exec 'coveralls -v'
