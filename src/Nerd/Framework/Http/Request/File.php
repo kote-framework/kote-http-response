@@ -9,6 +9,8 @@ class File implements FileContract
     private $tempName;
     private $error;
 
+    private $saved = false;
+
     /**
      * @param $name
      * @param $size
@@ -48,12 +50,22 @@ class File implements FileContract
     }
 
     /**
-     * @param $path
+     * @param string $path
+     * @throws \Exception
      */
     public function saveAs($path)
     {
-        if (move_uploaded_file($this->getTempName(), $path)) {
+        if ($this->saved) {
+            throw new \Exception("File \"{$this->getName()}\" already saved to \"{$this->getTempName()}\"");
+        }
+        if (!$this->isUploadedFile($this->getTempName())) {
+            throw new \Exception("File \"{$this->getName()}\" is not valid uploaded file");
+        }
+        if ($this->moveUploadedFile($this->getTempName(), $path)) {
             $this->tempName = $path;
+            $this->saved = true;
+        } else {
+            throw new \Exception("File {$this->getName()} could not be saved");
         }
     }
 
@@ -62,7 +74,7 @@ class File implements FileContract
      */
     public function getStream()
     {
-        return fopen($this->getTempName(), 'rb');
+        return fopen($this->getTempName(), 'r');
     }
 
     /**
@@ -79,5 +91,32 @@ class File implements FileContract
     public function getError()
     {
         return $this->error;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSaved()
+    {
+        return $this->saved;
+    }
+
+    /**
+     * @param $file
+     * @return bool
+     */
+    protected function isUploadedFile($file)
+    {
+        return is_uploaded_file($file);
+    }
+
+    /**
+     * @param $file
+     * @param $destination
+     * @return bool
+     */
+    protected function moveUploadedFile($file, $destination)
+    {
+        return move_uploaded_file($file, $destination);
     }
 }
