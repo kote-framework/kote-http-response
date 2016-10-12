@@ -6,12 +6,10 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist>
-            <directory suffix=".php">src</directory>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/Nerd/Framework/Http/Request</directory>
+            <directory suffix=".php">src/Nerd/Framework/Http/Response</directory>
         </whitelist>
-        <blacklist>
-            <directory>src/Nerd/Framework/Http/IO</directory>
-        </blacklist>
     </filter>
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
