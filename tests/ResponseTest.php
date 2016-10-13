@@ -2,12 +2,17 @@
 
 namespace tests;
 
+use Nerd\Framework\Http\IO\GenericHttpInput;
 use Nerd\Framework\Http\IO\OutputContract;
+use Nerd\Framework\Http\Request\Request;
 use Nerd\Framework\Http\Response\ResponseContract;
 use PHPUnit\Framework\TestCase;
 
 use Nerd\Framework\Http\Response;
 
+/**
+ * @afterClass tests\GenericIOTest
+ */
 class ResponseTest extends TestCase
 {
     public function testEmptyResponse()
@@ -114,6 +119,33 @@ class ResponseTest extends TestCase
         $output->expects($this->once())->method('sendCookie')->with($this->equalTo($cookie));
 
         $response->addCookie($cookie);
+
+        $response->render($output);
+    }
+
+    public function testResponsePrepare()
+    {
+        $request = (new GenericHttpInput())->getRequest();
+        $response = new Response\PlainResponse();
+
+        $this->assertNull($response->getServerProtocol());
+
+        $response->prepare($request);
+
+        $this->assertEquals(
+            $request->getServerParameter('SERVER_PROTOCOL'),
+            $response->getServerProtocol()
+        );
+    }
+
+    public function testHeadMethod()
+    {
+        $response = new Response\PlainResponse("Content, that does not be sent");
+
+        $output = $this->createMock(OutputContract::class);
+        $output->expects($this->never())->method('sendData');
+
+        $response->prepare(Request::create('/', 'HEAD'));
 
         $response->render($output);
     }

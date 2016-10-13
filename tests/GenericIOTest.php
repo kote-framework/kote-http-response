@@ -3,8 +3,12 @@
 namespace tests;
 
 use Nerd\Framework\Http\IO\GenericHttpInput;
+use Nerd\Framework\Http\IO\GenericHttpOutput;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @afterClass tests\RequestTest
+ */
 class GenericIOTest extends TestCase
 {
     public function testMakeInput()

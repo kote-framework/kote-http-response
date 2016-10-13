@@ -102,7 +102,9 @@ abstract class Response implements ResponseContract
     public function prepare(RequestContract $request)
     {
         if (is_null($this->getServerProtocol())) {
-            $this->setServerProtocol($_SERVER['SERVER_PROTOCOL']);
+            $this->setServerProtocol(
+                $request->getServerParameter('SERVER_PROTOCOL')
+            );
         }
 
         if ($request->isMethod('HEAD')) {

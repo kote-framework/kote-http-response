@@ -20,7 +20,7 @@ class Request implements RequestContract
     private $headers;
 
     private static $filteredParameters = [
-        "REMOTE_ADDR", "SERVER_ADDR"
+        "REMOTE_ADDR", "SERVER_ADDR", "SERVER_PROTOCOL"
     ];
 
     public function __construct(
