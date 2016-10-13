@@ -63,6 +63,22 @@ class FileTest extends TestCase
         $this->assertNull($request->getFile('file3'));
     }
 
+    /**
+     * @expectedException \Exception
+     */
+    public function testInvalidUploadFile()
+    {
+        $file = new File(
+            pathinfo($this->uploadFile, PATHINFO_BASENAME),
+            filesize($this->uploadFile),
+            $this->uploadFile
+        );
+
+        $saveTo = vfsStream::newFile('save.me')->at($this->vfs);
+
+        $file->saveAs($saveTo->url());
+    }
+
     public function testFile()
     {
         $file = new MockFile(

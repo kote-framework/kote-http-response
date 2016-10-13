@@ -24,7 +24,9 @@ class ResponseTest extends TestCase
 
     public function testPlainResponse()
     {
-        $response = new Response\PlainResponse('hello, world!');
+        $response = new Response\PlainResponse('hello, ');
+        $response->write('world!');
+        $this->assertEquals('hello, world!', $response->getContent());
 
         $output = $this->createMock(OutputContract::class);
         $output->expects($this->once())->method('sendData')->with($this->equalTo('hello, world!'));
@@ -32,6 +34,7 @@ class ResponseTest extends TestCase
         $this->assertInstanceOf(ResponseContract::class, $response);
 
         $response->render($output);
+
     }
 
     public function testStreamResponse()
@@ -62,6 +65,7 @@ class ResponseTest extends TestCase
     {
         $json = ['test' => ['hello', 'foo'], 'bar' => 'baz'];
         $response = new Response\JsonResponse($json);
+        $this->assertEquals($json, $response->getData());
 
         $output = $this->createMock(OutputContract::class);
         $output->expects($this->once())->method('sendData')->with($this->equalTo(json_encode($json)));
