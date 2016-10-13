@@ -78,6 +78,22 @@ abstract class Response implements ResponseContract
     private $shouldRenderContent = true;
 
     /**
+     * @return int|null
+     */
+    public function getContentLength()
+    {
+        return $this->contentLength;
+    }
+
+    /**
+     * @param int $length
+     */
+    public function setContentLength($length)
+    {
+        $this->contentLength = $length;
+    }
+
+    /**
      * @return string
      */
     public function getServerProtocol()
@@ -123,14 +139,14 @@ abstract class Response implements ResponseContract
         }
     }
 
-    private function prepareHeaders()
+    protected function prepareHeaders()
     {
-        if ($this->getFileName()) {
-            $this->addHeader(self::CONTENT_DISPOSITION_HEADER, "filename*=UTF-8''" . $this->fileName);
-        }
-
         if ($this->isAttachment) {
             $this->addHeader(self::CONTENT_DISPOSITION_HEADER, "attachment");
+        }
+
+        if ($this->getFileName()) {
+            $this->addHeader(self::CONTENT_DISPOSITION_HEADER, "filename*=UTF-8''" . $this->fileName);
         }
 
         if (!is_null($this->contentLength)) {
@@ -306,19 +322,10 @@ abstract class Response implements ResponseContract
     }
 
     /**
-     * @param null $contentLength
-     * @return Response
-     */
-    public function setContentLength($contentLength)
-    {
-        $this->contentLength = $contentLength;
-        return $this;
-    }
-
-    /**
      * Close resources (if any) used in this Response.
      */
     public function close()
     {
+        return;
     }
 }

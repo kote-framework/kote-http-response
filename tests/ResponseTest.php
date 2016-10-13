@@ -186,4 +186,35 @@ class ResponseTest extends TestCase
 
         $response->render($output);
     }
+
+    public function testContentLength()
+    {
+        $response = new Response\EmptyResponse();
+
+        $output = $this->createMock(OutputContract::class);
+        $output->expects($this->at(2))
+            ->method('sendHeader')
+            ->with($this->equalTo("Content-Length: 128"));
+
+        $response->setContentLength(128);
+
+        $this->assertEquals(128, $response->getContentLength());
+
+        $response->render($output);
+    }
+
+    public function testAttachment()
+    {
+        $response = new Response\PlainResponse();
+        $response->setFileName('response.txt');
+        $response->setAttachment(true);
+        $this->assertEquals('response.txt', $response->getFileName());
+
+        $output = $this->createMock(OutputContract::class);
+        $output->expects($this->at(2))
+            ->method('sendHeader')
+            ->with($this->equalTo("Content-Disposition: attachment; filename*=UTF-8''response.txt"));
+
+        $response->render($output);
+    }
 }
