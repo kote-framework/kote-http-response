@@ -111,14 +111,14 @@ class File implements FileContract
     }
 
     /**
-     * @coreCoverageIgnore
-     *
      * @param $file
      * @param $destination
      * @return bool
      */
     protected function moveUploadedFile($file, $destination)
     {
+        // @codeCoverageIgnoreStart
         return move_uploaded_file($file, $destination);
+        // @codeCoverageIgnoreEnd
     }
 }
