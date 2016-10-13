@@ -6,11 +6,24 @@ use Nerd\Framework\Http\Request\File;
 
 class MockFile extends File
 {
+    /**
+     * @covers Nerd\Framework\Http\Request\File::isUploadedFile
+     *
+     * @param $file
+     * @return bool
+     */
     protected function isUploadedFile($file)
     {
         return file_exists($file);
     }
 
+    /**
+     * @covers Nerd\Framework\Http\Request\File::moveUploadedFile
+     *
+     * @param $file
+     * @param $destination
+     * @return bool
+     */
     protected function moveUploadedFile($file, $destination)
     {
         if (!is_dir(pathinfo($destination, PATHINFO_DIRNAME))) {

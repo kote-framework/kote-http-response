@@ -87,6 +87,8 @@ class FileTest extends TestCase
             $this->uploadFile
         );
 
+        $this->assertEquals(UPLOAD_ERR_OK, $file->getError());
+
         $this->assertEquals('load.me', $file->getName());
         $this->assertEquals(filesize($this->uploadFile), $file->getSize());
         $this->assertEquals($this->uploadFile, $file->getTempName());
