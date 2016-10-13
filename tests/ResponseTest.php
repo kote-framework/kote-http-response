@@ -138,12 +138,51 @@ class ResponseTest extends TestCase
 
     public function testHeadMethod()
     {
-        $response = new Response\PlainResponse("Content, that must not be sent");
+        $response = new Response\PlainResponse("Content, that must not be sent.");
 
         $output = $this->createMock(OutputContract::class);
         $output->expects($this->never())->method('sendData');
 
         $response->prepare(Request::create('/', 'HEAD'));
+
+        $response->render($output);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testIncorrectStatusCode()
+    {
+        $output = $this->createMock(OutputContract::class);
+
+        $response = new Response\EmptyResponse();
+        $response->setStatusCode(900);
+        $response->render($output);
+        $response->close();
+    }
+
+    public function testPrintStatusCode()
+    {
+        $response = new Response\PlainResponse();
+
+        $output = $this->createMock(OutputContract::class);
+        $output->expects($this->at(0))
+            ->method('sendHeader')
+            ->with($this->equalTo("HTTP/1.0 200 OK"));
+
+        $response->render($output);
+    }
+
+    public function testFileName()
+    {
+        $response = new Response\PlainResponse();
+        $response->setFileName('response.txt');
+        $this->assertEquals('response.txt', $response->getFileName());
+
+        $output = $this->createMock(OutputContract::class);
+        $output->expects($this->at(2))
+            ->method('sendHeader')
+            ->with($this->equalTo("Content-Disposition: filename*=UTF-8''response.txt"));
 
         $response->render($output);
     }

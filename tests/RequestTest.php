@@ -117,4 +117,12 @@ class RequestTest extends TestCase
         $this->assertEquals('second', $request->getHeader('Second-Header'));
         $this->assertEquals('2.3.4.5', $request->getHeader('X-Real-Ip'));
     }
+
+    public function testPostParametersAndCookies()
+    {
+        $request = new Request('/', 'GET', [], ["postName" => "postValue"], [], ["cookieName" => "cookieValue"]);
+
+        $this->assertEquals('cookieValue', $request->getCookie('cookieName'));
+        $this->assertEquals('postValue', $request->getPostParameter('postName'));
+    }
 }
