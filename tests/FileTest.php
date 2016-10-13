@@ -2,11 +2,29 @@
 
 namespace tests;
 
+use Nerd\Framework\Http\Request\File;
 use Nerd\Framework\Http\Request\Request;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use tests\fixtures\MockFile;
 
 class FileTest extends TestCase
 {
+    private $uploadContent = "Random file contents.";
+
+    private $vfs;
+
+    private $uploadFile;
+
+    public function setUp()
+    {
+        $this->vfs = vfsStream::setup('upload');
+        $this->uploadFile = vfsStream::newFile('load.me')
+                           ->withContent($this->uploadContent)
+                           ->at($this->vfs)
+                           ->url();
+    }
+
     public function testFileEncapsulation()
     {
         $request = new Request('/', 'GET', [], [], [
@@ -43,5 +61,67 @@ class FileTest extends TestCase
         $this->assertEquals(20, $file2->getSize());
 
         $this->assertNull($request->getFile('file3'));
+    }
+
+    public function testFile()
+    {
+        $file = new MockFile(
+            pathinfo($this->uploadFile, PATHINFO_BASENAME),
+            filesize($this->uploadFile),
+            $this->uploadFile
+        );
+
+        $this->assertEquals('load.me', $file->getName());
+        $this->assertEquals(filesize($this->uploadFile), $file->getSize());
+        $this->assertEquals($this->uploadFile, $file->getTempName());
+
+        $this->assertFalse($file->isSaved());
+        $this->assertTrue($file->isOk());
+
+        return $file;
+    }
+
+    /**
+     * @depends testFile
+     * @param File $file
+     * @return File
+     */
+    public function testSaveFile(File $file)
+    {
+        $clonedFile = clone $file;
+
+        $contents = stream_get_contents($clonedFile->getStream());
+        $saveTo = vfsStream::newFile('save.me')->at($this->vfs);
+
+        $clonedFile->saveAs($saveTo->url());
+        $this->assertTrue($clonedFile->isSaved());
+        $this->assertEquals($contents, $saveTo->getContent());
+
+        return $clonedFile;
+    }
+
+    /**
+     * @depends testFile
+     * @expectedException \Exception
+     * @param File $file
+     */
+    public function testSaveError(File $file)
+    {
+        $clonedFile = clone $file;
+
+        $clonedFile->saveAs($this->vfs->url());
+    }
+
+    /**
+     * @depends testSaveFile
+     * @expectedException \Exception
+     * @param File $file
+     */
+    public function testSaveAgain(File $file)
+    {
+        $dir = vfsStream::setup('root');
+        $saveFile = vfsStream::newFile('save.again')->at($dir);
+
+        $file->saveAs($saveFile->url());
     }
 }
