@@ -2,7 +2,6 @@
 
 namespace tests;
 
-use Nerd\Framework\Http\IO\GenericHttpInput;
 use Nerd\Framework\Http\IO\OutputContract;
 use Nerd\Framework\Http\Request\Request;
 use Nerd\Framework\Http\Response\ResponseContract;
@@ -10,9 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 use Nerd\Framework\Http\Response;
 
-/**
- * @afterClass tests\GenericIOTest
- */
 class ResponseTest extends TestCase
 {
     public function testEmptyResponse()
@@ -125,7 +121,9 @@ class ResponseTest extends TestCase
 
     public function testResponsePrepare()
     {
-        $request = (new GenericHttpInput())->getRequest();
+        $request = new Request('/', 'GET', [], [], [], [], [
+            'SERVER_PROTOCOL' => 'HTTP/1.1'
+        ]);
         $response = new Response\PlainResponse();
 
         $this->assertNull($response->getServerProtocol());
@@ -140,7 +138,7 @@ class ResponseTest extends TestCase
 
     public function testHeadMethod()
     {
-        $response = new Response\PlainResponse("Content, that does not be sent");
+        $response = new Response\PlainResponse("Content, that must not be sent");
 
         $output = $this->createMock(OutputContract::class);
         $output->expects($this->never())->method('sendData');

@@ -7,24 +7,10 @@
     </testsuites>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src/Nerd/Framework/Http/Request</directory>
-            <directory suffix=".php">src/Nerd/Framework/Http/Response</directory>
+            <directory suffix=".php">src</directory>
         </whitelist>
     </filter>
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
-    <php>
-        <server name="REQUEST_URI" value="/"/>
-        <server name="REQUEST_METHOD" value="GET"/>
-        <server name="REMOTE_ADDR" value="1.2.3.4"/>
-        <server name="SERVER_ADDR" value="4.3.2.1"/>
-        <server name="SERVER_PROTOCOL" value="HTTP/1.1"/>
-        <server name="HTTP_X_REAL_IP" value="2.3.4.5"/>
-        <server name="HTTP_USER_AGENT" value="Test/1.0"/>
-
-        <cookie name="cookieName" value="cookieValue"/>
-
-        <post name="postName" value="postValue"/>
-    </php>
 </phpunit>
