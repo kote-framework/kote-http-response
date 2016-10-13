@@ -7,8 +7,6 @@ use Nerd\Framework\Http\Request\File;
 class MockFile extends File
 {
     /**
-     * @covers Nerd\Framework\Http\Request\File::isUploadedFile
-     *
      * @param $file
      * @return bool
      */
@@ -18,8 +16,6 @@ class MockFile extends File
     }
 
     /**
-     * @covers Nerd\Framework\Http\Request\File::moveUploadedFile
-     *
      * @param $file
      * @param $destination
      * @return bool

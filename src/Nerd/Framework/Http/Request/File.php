@@ -111,6 +111,8 @@ class File implements FileContract
     }
 
     /**
+     * @coreCoverageIgnore
+     *
      * @param $file
      * @param $destination
      * @return bool
