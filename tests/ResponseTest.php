@@ -34,7 +34,6 @@ class ResponseTest extends TestCase
         $this->assertInstanceOf(ResponseContract::class, $response);
 
         $response->render($output);
-
     }
 
     public function testStreamResponse()
