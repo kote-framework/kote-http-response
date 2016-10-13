@@ -35,4 +35,11 @@ class CookieTest extends TestCase
         $this->assertTrue($cookie->isHttpOnly());
         $this->assertTrue($cookie->isRaw());
     }
+
+    public function testCookieToString()
+    {
+        $cookie = new RawCookie('name', 'value', 10, '/', '.domain.com', true, true);
+        $expected = "Set-Cookie: name=value; Expires=10; Path=/; Domain=.domain.com; Secure; HttpOnly";
+        $this->assertEquals($expected, (string) $cookie);
+    }
 }
