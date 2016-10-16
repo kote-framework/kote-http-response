@@ -232,6 +232,14 @@ abstract class Response implements ResponseContract
     }
 
     /**
+     * return int
+     */
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+    
+    /**
      * @param int $statusCode
      * @return Response
      */
