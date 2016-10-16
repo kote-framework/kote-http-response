@@ -128,6 +128,10 @@ abstract class Response implements ResponseContract
         }
     }
 
+    /**
+     * @param OutputContract $output
+     * @return void
+     */
     public function render(OutputContract $output)
     {
         $this->prepareHeaders();
@@ -139,6 +143,9 @@ abstract class Response implements ResponseContract
         }
     }
 
+    /**
+     * return void
+     */
     protected function prepareHeaders()
     {
         if ($this->isAttachment) {
@@ -158,6 +165,10 @@ abstract class Response implements ResponseContract
         $this->addHeader(self::CONTENT_TYPE_HEADER, "charset={$this->charset}");
     }
 
+    /**
+     * @param OutputContract $output
+     * @return void
+     */
     private function sendHeaders(OutputContract $output)
     {
         if ($output->isHeadersSent()) {
@@ -169,15 +180,23 @@ abstract class Response implements ResponseContract
         }
 
         foreach ($this->headers as $name => $value) {
-            $output->sendHeader($name.": ".implode("; ", $value));
+            $output->sendHeader($name . ": " . implode("; ", $value));
         }
     }
 
+    /**
+     * @param OutputContract $output
+     * @return void
+     */
     private function sendStatusCode(OutputContract $output)
     {
         $output->sendHeader($this->getStatusText($this->statusCode));
     }
 
+    /**
+     * @param $statusCode
+     * @return string
+     */
     public function getStatusText($statusCode)
     {
         $statusTextMap = [
@@ -250,6 +269,15 @@ abstract class Response implements ResponseContract
     }
 
     /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasHeader($name)
+    {
+        return array_key_exists($name, $this->headers);
+    }
+
+    /**
      * @param $name
      * @param $value
      * @return Response
@@ -264,12 +292,21 @@ abstract class Response implements ResponseContract
     }
 
     /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasCookie($name)
+    {
+        return array_key_exists($name, $this->cookies);
+    }
+
+    /**
      * @param CookieContract $cookie
      * @return Response
      */
     public function addCookie(CookieContract $cookie)
     {
-        $this->cookies[] = $cookie;
+        $this->cookies[$cookie->getName()] = $cookie;
         return $this;
     }
 
@@ -307,6 +344,14 @@ abstract class Response implements ResponseContract
     public function isAttachment()
     {
         return $this->isAttachment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
     }
 
     /**
