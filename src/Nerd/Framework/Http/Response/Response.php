@@ -160,7 +160,7 @@ abstract class Response implements ResponseContract
             $this->addHeader(self::CONTENT_LENGTH_HEADER, $this->contentLength);
         }
 
-        $this->addHeader(self::CONTENT_TYPE_HEADER, $this->contentType ?: self::DEFAULT_CONTENT_TYPE);
+        $this->addHeader(self::CONTENT_TYPE_HEADER, $this->contentType);
 
         $this->addHeader(self::CONTENT_TYPE_HEADER, "charset={$this->charset}");
     }
@@ -197,7 +197,7 @@ abstract class Response implements ResponseContract
      * @param $statusCode
      * @return string
      */
-    public function getStatusText($statusCode)
+    protected function getStatusText($statusCode)
     {
         $statusTextMap = [
             100 => 'Continue',
@@ -362,6 +362,14 @@ abstract class Response implements ResponseContract
     {
         $this->contentType = $contentType;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCharset()
+    {
+        return $this->charset;
     }
 
     /**
