@@ -114,7 +114,7 @@ class ResponseTest extends TestCase
         $output = $this->createMock(OutputContract::class);
         $output->expects($this->once())->method('sendCookie')->with($this->equalTo($cookie));
 
-        $response->addCookie($cookie);
+        $response->setCookie($cookie);
 
         $response->render($output);
     }

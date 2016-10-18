@@ -5,7 +5,7 @@ namespace Nerd\Framework\Http\Response;
 use Nerd\Framework\Http\IO\OutputContract;
 use Nerd\Framework\Http\Request\RequestContract;
 
-abstract class Response implements ResponseContract
+abstract class Response implements BaseResponseContract
 {
     const DEFAULT_CONTENT_TYPE = "text/html";
     const DEFAULT_CHARSET = "utf-8";
@@ -293,6 +293,17 @@ abstract class Response implements ResponseContract
 
     /**
      * @param string $name
+     * @return string|null
+     */
+    public function getHeader($name)
+    {
+        return $this->hasHeader($name)
+            ? implode('; ', $this->headers[$name])
+            : null;
+    }
+
+    /**
+     * @param string $name
      * @return bool
      */
     public function hasCookie($name)
@@ -302,12 +313,20 @@ abstract class Response implements ResponseContract
 
     /**
      * @param CookieContract $cookie
-     * @return Response
+     * @return void
      */
-    public function addCookie(CookieContract $cookie)
+    public function setCookie(CookieContract $cookie)
     {
         $this->cookies[$cookie->getName()] = $cookie;
-        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return CookieContract|null
+     */
+    public function getCookie($name)
+    {
+        return $this->hasCookie($name) ? $this->cookies[$name] : null;
     }
 
     /**
