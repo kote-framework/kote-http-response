@@ -107,7 +107,7 @@ class GenericViewResponse extends Response
         return $this;
     }
 
-    public function renderContent(OutputContract $output)
+    protected function renderContent(OutputContract $output)
     {
         ob_start();
         $this->renderGenericView(

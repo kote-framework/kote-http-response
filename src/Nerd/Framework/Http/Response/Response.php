@@ -311,6 +311,14 @@ abstract class Response implements ResponseContract
     }
 
     /**
+     * @return string|null
+     */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+
+    /**
      * @param null $fileName
      * @return Response
      */
@@ -320,13 +328,7 @@ abstract class Response implements ResponseContract
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getFileName()
-    {
-        return $this->fileName;
-    }
+
 
     /**
      * @param boolean $isAttachment

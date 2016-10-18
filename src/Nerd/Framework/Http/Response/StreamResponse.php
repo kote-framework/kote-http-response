@@ -20,14 +20,14 @@ class StreamResponse extends Response
         $this->setStatusCode($statusCode);
     }
 
-    public function setStream($fp)
+    private function setStream($fp)
     {
         $this->stream = $fp;
 
         return $this;
     }
 
-    public function renderContent(OutputContract $output)
+    protected function renderContent(OutputContract $output)
     {
         while ($data = fread($this->stream, self::PIPE_BUFFER_SIZE)) {
             $output->sendData($data);

@@ -26,7 +26,7 @@ class PlainResponse extends Response
         $this->content .= $string;
     }
 
-    public function renderContent(OutputContract $output)
+    protected function renderContent(OutputContract $output)
     {
         $output->sendData($this->content);
     }

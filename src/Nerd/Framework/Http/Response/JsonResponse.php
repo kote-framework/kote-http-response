@@ -29,13 +29,13 @@ class JsonResponse extends Response
      * @param mixed $data
      * @return $this
      */
-    public function setData($data)
+    private function setData($data)
     {
         $this->data = $data;
         return $this;
     }
 
-    public function renderContent(OutputContract $output)
+    protected function renderContent(OutputContract $output)
     {
         $output->sendData(json_encode($this->data, JSON_UNESCAPED_UNICODE));
     }
