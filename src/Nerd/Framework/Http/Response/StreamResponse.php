@@ -6,8 +6,6 @@ use Nerd\Framework\Http\IO\OutputContract;
 
 class StreamResponse extends Response
 {
-    const PIPE_BUFFER_SIZE = 4096;
-
     private $stream;
 
     public function __construct($stream = null, $statusCode = StatusCode::HTTP_OK)
@@ -29,9 +27,7 @@ class StreamResponse extends Response
 
     protected function renderContent(OutputContract $output)
     {
-        while ($data = fread($this->stream, self::PIPE_BUFFER_SIZE)) {
-            $output->sendData($data);
-        }
+        $output->sendData($this->stream);
     }
 
     /**
