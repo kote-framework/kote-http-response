@@ -44,7 +44,7 @@ class ResponseTest extends TestCase
         $response = new Response\StreamResponse($stream);
 
         $output = $this->createMock(OutputContract::class);
-        $output->expects($this->once())->method('sendData')->with($this->equalTo('random data'));
+        $output->expects($this->once())->method('sendData')->with($stream);
 
         $this->assertInstanceOf(ResponseContract::class, $response);
 
